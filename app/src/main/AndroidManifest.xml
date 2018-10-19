@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+          package="com.jiaoyf.www.saas">
+
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE"/>
+    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.READ_PHONE_STATE"/>
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
+    <!--存储权限  SD卡读写权限 -->
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+    <!--拨打电话-->
+    <uses-permission android:name="android.permission.CALL_PHONE" />
+
+    <application
+            android:name=".app.APPAplication"
+            android:allowBackup="true"
+            android:icon="@mipmap/jiaoyf"
+            android:label="@string/app_name"
+            android:roundIcon="@mipmap/jiaoyf"
+            android:supportsRtl="true"
+            android:theme="@style/AppTheme">
+
+        <!-- 欢迎界面 -->
+        <activity android:name=".WelcomeActivity">
+        </activity>
+        <!-- 主界面 -->
+        <activity android:name=".MainActivity">
+        </activity>
+        <!-- TBS -->
+        <activity
+                android:name=".TBSActivity"
+                android:windowSoftInputMode="stateHidden|adjustResize">
+        </activity>
+        <activity android:name=".RecyclerViewActivity">
+        </activity>
+
+        <!-- <receiver -->
+        <!-- android:name=".receiver.BootCompleteReceiver" -->
+        <!-- android:enabled="true" -->
+        <!-- android:exported="true"> -->
+        <!-- <intent-filter> -->
+        <!-- <action android:name="android.intent.action.BOOT_COMPLETED" /> -->
+        <!-- </intent-filter> -->
+        <!-- </receiver> -->
+
+        <receiver android:name=".receiver.PhoneCallReceiver">
+            <intent-filter>
+                <action android:name="android.intent.action.PHONE_STATE"/>
+                <action android:name="android.intent.action.NEW_OUTGOING_CALL" />
+            </intent-filter>
+        </receiver>
+
+        <activity android:name=".VideoActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <provider
+                android:name="android.support.v4.content.FileProvider"
+                android:authorities="com.jiaoyf.www.saas"
+                android:exported="false"
+                android:grantUriPermissions="true">
+            <meta-data
+                    android:name="android.support.FILE_PROVIDER_PATHS"
+                    android:resource="@xml/file_paths" />
+        </provider>
+    </application>
+
+</manifest>
