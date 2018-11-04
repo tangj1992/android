@@ -8,10 +8,10 @@
     <uses-permission android:name="android.permission.INTERNET"/>
     <uses-permission android:name="android.permission.READ_PHONE_STATE"/>
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
-    <!--存储权限  SD卡读写权限 -->
+    <!-- 存储权限  SD卡读写权限 -->
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
-    <!--拨打电话-->
-    <uses-permission android:name="android.permission.CALL_PHONE" />
+    <!-- 拨打电话 -->
+    <uses-permission android:name="android.permission.CALL_PHONE"/>
 
     <application
             android:name=".app.APPAplication"
@@ -48,16 +48,13 @@
         <receiver android:name=".receiver.PhoneCallReceiver">
             <intent-filter>
                 <action android:name="android.intent.action.PHONE_STATE"/>
-                <action android:name="android.intent.action.NEW_OUTGOING_CALL" />
+                <action android:name="android.intent.action.NEW_OUTGOING_CALL"/>
             </intent-filter>
         </receiver>
 
         <activity android:name=".VideoActivity">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
+
         <provider
                 android:name="android.support.v4.content.FileProvider"
                 android:authorities="com.jiaoyf.www.saas"
@@ -65,8 +62,25 @@
                 android:grantUriPermissions="true">
             <meta-data
                     android:name="android.support.FILE_PROVIDER_PATHS"
-                    android:resource="@xml/file_paths" />
+                    android:resource="@xml/file_paths"/>
         </provider>
+
+        <activity
+                android:name=".DownloadActivity"
+                android:label="@string/title_activity_download"
+                android:theme="@style/AppTheme.NoActionBar">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN"/>
+
+                <category android:name="android.intent.category.LAUNCHER"/>
+            </intent-filter>
+        </activity>
+
+        <service
+                android:name=".download.DownloadService"
+                android:enabled="true"
+                android:exported="true">
+        </service>
     </application>
 
 </manifest>
