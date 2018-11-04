@@ -1,12 +1,10 @@
 package com.jiaoyf.www.saas.download;
 
-import android.app.Notification;
-import android.app.NotificationManager;
-import android.app.PendingIntent;
-import android.app.Service;
+import android.app.*;
 import android.content.Intent;
 import android.graphics.BitmapFactory;
 import android.os.Binder;
+import android.os.Build;
 import android.os.Environment;
 import android.os.IBinder;
 import android.support.v4.app.NotificationCompat;
@@ -76,6 +74,8 @@ public class DownloadService extends Service {
         public void pauseDownlod(){
             if (downloadTask != null){
                 downloadTask.pauseDownlod();
+                startForeground(1,getNotification("暂停中...",0));
+                Toast.makeText(DownloadService.this, "暂停中...", Toast.LENGTH_SHORT).show();
             }
         }
         public void cancelDownload(){
@@ -101,20 +101,38 @@ public class DownloadService extends Service {
     private NotificationManager getNotificationManager(){
         return (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
     }
-    private Notification getNotification(String title, int progress){
+    private Notification getNotification(String title, int progress) {
         Intent intent = new Intent(this, DownloadActivity.class);
-        PendingIntent pi = PendingIntent.getActivity(this,0,intent,0);
-        NotificationCompat.Builder builder = new NotificationCompat.Builder(this, "default");
-        builder.setSmallIcon(R.mipmap.ic_launcher);
-        builder.setLargeIcon(BitmapFactory.decodeResource(getResources(),R.mipmap.ic_launcher));
-        builder.setContentIntent(pi);
-        builder.setContentTitle(title);
-        if (progress > 0){
-            //当progress大于0时才显示下载进度
-            builder.setContentText(progress + "%");
-            builder.setProgress(100,progress,false);
+        PendingIntent pi = PendingIntent.getActivity(this, 0, intent, 0);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O){
+            NotificationChannel channel = new NotificationChannel("1", "下载进度",NotificationManager.IMPORTANCE_LOW);
+            getNotificationManager().createNotificationChannel(channel);
+
+            Notification.Builder builder = new Notification.Builder(this,"1");
+            builder.setSmallIcon(R.mipmap.ic_launcher);
+            builder.setLargeIcon(BitmapFactory.decodeResource(getResources(),R.mipmap.ic_launcher));
+            builder.setContentIntent(pi);
+            builder.setContentTitle(title);
+            if (progress > 0){
+                //当progress大于0时才显示下载进度
+                builder.setContentText(progress + "%");
+                builder.setProgress(100,progress,false);
+            }
+            return builder.build();
+        }else{
+            NotificationCompat.Builder builder = new NotificationCompat.Builder(this, null);
+            builder.setSmallIcon(R.mipmap.ic_launcher);
+            builder.setLargeIcon(BitmapFactory.decodeResource(getResources(),R.mipmap.ic_launcher));
+            builder.setContentIntent(pi);
+            builder.setContentTitle(title);
+            if (progress > 0){
+                //当progress大于0时才显示下载进度
+                builder.setContentText(progress + "%");
+                builder.setProgress(100,progress,false);
+            }
+            return builder.build();
         }
-        return builder.build();
+
     }
 }
 

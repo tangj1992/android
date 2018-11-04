@@ -53,7 +53,7 @@ public class DownloadTask extends AsyncTask<String, Integer, Integer> {
                               .url(downloadUrl)
                               .build();
             Response response = client.newCall(request).execute();
-            if (response == null){
+            if (response != null){
                 is = response.body().byteStream();
                 savedFile = new RandomAccessFile(file,"rw");
                 savedFile.seek(downloadLength);//跳过已下载的字节
@@ -61,6 +61,7 @@ public class DownloadTask extends AsyncTask<String, Integer, Integer> {
                 int total = 0;
                 int len;
                 while ((len = is.read(b)) != -1 ){
+                    Log.d("downloading", "downloading");
                     if (isCanceled) {
                         return TYPE_CANCELED;
                     }else if (isPaused){
